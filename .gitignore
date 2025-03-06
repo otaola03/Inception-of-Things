@@ -1,0 +1,55 @@
+# Ignorar archivos de configuración de Vagrant
+.vagrant/
+*.box
+*.log
+
+# Claves SSH generadas por Vagrant
+.vagrant/machines/
+id_rsa*
+id_dsa*
+*.pem
+
+# Archivos de estado de Kubernetes
+*.kube/
+.kube/config
+k3s/
+k3s.log
+var/lib/rancher/k3s/
+
+# Archivos de imágenes y contenedores
+*.img
+*.qcow2
+*.vdi
+*.vmdk
+*.iso
+
+# Archivos de configuración locales y credenciales
+.env
+*.env
+secrets.yaml
+config.yaml
+credentials/
+node-token
+
+# Archivos temporales del sistema
+*.swp
+*.swo
+.DS_Store
+*.tmp
+
+# Archivos de logs y salida de ejecución
+logs/
+*.log
+nohup.out
+
+# Archivos generados por editores y sistemas operativos
+.idea/
+.vscode/
+*.bak
+*.orig
+Thumbs.db
+
+# Ignorar carpetas compartidas en Vagrant
+/shared/
+sync/
+
