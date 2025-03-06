@@ -1,0 +1,39 @@
+Vagrant.configure("2") do |config|
+  # Definir el host principal (VM que ejecutará otras VMs)
+  config.vm.define "host_vm" do |host|
+    host.vm.box = "ubuntu/bionic64"
+    
+    # Habilitar la virtualización anidada en el host
+    host.vm.provider "virtualbox" do |vb|
+      vb.memory = "2048"
+      vb.cpus = 2
+      vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]  # Habilitar la virtualización anidada
+    end
+
+    # Provisión para instalar VirtualBox y Vagrant dentro de la VM "host_vm"
+    host.vm.provision "shell", inline: <<-SHELL
+      export DEBIAN_FRONTEND=noninteractive
+      sudo apt-get update
+      sudo apt-get install -y virtualbox virtualbox-ext-pack
+      sudo apt-get install -y qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
+    SHELL
+  end
+  
+  # Definir la VM interna (la máquina virtual que correrá dentro de la host_vm)
+  config.vm.define "nested_vm" do |nested|
+    nested.vm.box = "ubuntu/bionic64"
+
+    # Hacer que esta VM se ejecute dentro de la VM principal (host_vm)
+    nested.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.cpus = 1
+    end
+    
+    # Provisión para configurar algo dentro de la VM interna
+    nested.vm.provision "shell", inline: <<-SHELL
+      sudo apt-get update
+      sudo apt-get install -y nginx
+    SHELL
+  end
+end
+
