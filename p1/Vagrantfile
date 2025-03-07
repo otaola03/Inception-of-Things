@@ -1,27 +1,32 @@
+
+# Vagrantfile
 Vagrant.configure("2") do |config|
-  server_ip = "192.168.56.110"
-  worker_ip = "192.168.56.111"
-  
-  config.vm.box = "generic/alpine318"
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = "1024"
-    vb.cpus = 1
-  end
-
-  # Definir el nodo Server
-  config.vm.define "jperezS" do |server|
-    server.vm.network "private_network", ip: server_ip
+  # Configuración de la máquina servidor
+  config.vm.define "server" do |server|
+    server.vm.box = "generic/alpine318"
+    server.vm.network "private_network", ip: "192.168.56.110"
+    server.vm.hostname = "jperezS"
+    server.vm.provision "shell", path: "confs/server.sh"
     server.vm.synced_folder "confs", "/shared"
-    server.vm.provision "shell", privileged: true, path: "confs/server.sh" 
+    server.vm.provider "virtualbox" do |vb|
+      vb.name = "k3s-server"
+      vb.memory = "1024"
+      vb.cpus = 1
+    end
   end
 
-  # Definir el nodo Worker
-  config.vm.define "jperezSW" do |worker|
-    worker.vm.network "private_network", ip: worker_ip
+  # Configuración de la máquina trabajador
+  config.vm.define "worker" do |worker|
+    worker.vm.box = "generic/alpine318"
+    worker.vm.hostname = "jperezSW"
+    worker.vm.network "private_network", ip: "192.168.56.111"
+    worker.vm.provision "shell", path: "confs/worker.sh", args: ["192.168.56.110"]
     worker.vm.synced_folder "confs", "/shared"
-    worker.vm.provision "shell", privileged: true, path: "confs/worker.sh", args: [server_ip]
-
+    worker.vm.provider "virtualbox" do |vb|
+      vb.name = "k3s-worker"
+      vb.memory = "1024"
+      vb.cpus = 1
+    end
   end
-
 end
 
