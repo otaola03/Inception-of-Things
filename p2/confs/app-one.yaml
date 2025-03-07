@@ -17,6 +17,9 @@ spec:
         image: paulbouwer/hello-kubernetes:1.10
         ports:
         - containerPort: 8080
+        env:
+          - name: MESSAGE
+            value: "Hello from app-one"
 ---
 apiVersion: v1
 kind: Service
