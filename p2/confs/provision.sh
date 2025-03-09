@@ -46,30 +46,29 @@ kubectl apply -f /shared/app-two.yaml --validate=false
 kubectl apply -f /shared/app-three.yaml --validate=false
 
 # Esperar a que los pods estén en estado Running
-echo "⏳ Esperando a que las aplicaciones estén listas..."
+echo "⏰ Esperando a que las aplicaciones estén listas..."
 kubectl wait --for=condition=Ready pod --all --timeout=120s
 
 # Aplicar el Ingress
 echo "🚀 Configurando Ingress..."
 kubectl apply -f /shared/ingress.yaml --validate=false
 
+
 while true; do
-    # Obtener la línea correspondiente al pod ingress-nginx-controller
+    # Obtener la línea correspondiente al recurso Ingress
     status_line=$(sudo kubectl get ing | grep "ingress")
-    
-    # Obtener el estado de 'READY' y 'STATUS'
-    pod_status=$(echo "$status_line" | awk '{print $4}')
-    
-	echo "line: $status_line"
-	echo "pod_status: $pod_status"
-    # Verificar si el pod está listo y en ejecución
-    if [[ "$pod_status" != "" ]]; then
-        echo "El pod ingress-nginx-controller está listo y en ejecución."
+
+    # Obtener la dirección IP de la columna 'ADDRESS'
+    address=$(echo "$status_line" | awk '{print $4}')
+
+    # Verificar si la dirección IP está presente y no es nula
+    if [[ "$address" != "80" && -n "$address" ]]; then
+        echo "La dirección IP del Ingress está disponible: $address"
         break  # Salir del bucle una vez que la condición se cumpla
     fi
-    
-    # Si no está listo, esperar 5 segundos y volver a comprobar
-	echo "El pod ingress-nginx-controller no está listo o en ejecución. Esperando..."
+
+    # Si no está lista, esperar 2 segundos y volver a comprobar
+    echo "La dirección IP del Ingress no está disponible. Esperando..."
     sleep 2
 done
 
