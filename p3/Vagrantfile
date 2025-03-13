@@ -2,9 +2,9 @@ Vagrant.configure("2") do |config|
   ip = "192.168.56.110"
 
   config.vm.box = "debian/bullseye64"
-  config.vm.network "private_network", ip: ip
   config.vm.hostname = "jperezS"
   config.vm.synced_folder "confs", "/shared"
+  config.vm.network "forwarded_port", guest: 8080, host: 8080, ip: ip
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "4096"
     vb.cpus = 2
