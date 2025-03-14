@@ -6,13 +6,13 @@ Vagrant.configure("2") do |config|
   
   # Configuración de red
   config.vm.network "private_network", ip: ip  # IP estática
-  config.vm.network "forwarded_port", guest: 8081, host: 8081  # ← Nueva línea
+  # config.vm.network "forwarded_port", guest: 8081, host: 8081  # ← Nueva línea
   # config.vm.network "forwarded_port", guest: 80, host: 8080   # HTTP
   # config.vm.network "forwarded_port", guest: 443, host: 8443 # HTTPS
 
   # Recursos de la VM
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "4096"
+    vb.memory = "2048"
     vb.cpus = 2
   end
 
