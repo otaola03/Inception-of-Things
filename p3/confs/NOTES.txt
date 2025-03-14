@@ -1,0 +1,7 @@
+sudo k3d cluster create my-cluster
+sudo kubectl get nodes
+sudo kubectl create namespace argocd
+sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+
+kubectl -n argocd port-forward --address 0.0.0.0 svc/argocd-server 8081:80

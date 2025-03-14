@@ -2,13 +2,20 @@ Vagrant.configure("2") do |config|
   ip = "192.168.56.110"
 
   config.vm.box = "debian/bullseye64"
-  config.vm.hostname = "jperezS"
-  config.vm.synced_folder "confs", "/shared"
-  config.vm.network "forwarded_port", guest: 8080, host: 8080, ip: ip
+  config.vm.hostname = "argocd-vm"
+  
+  # Configuración de red
+  config.vm.network "private_network", ip: ip  # IP estática
+  config.vm.network "forwarded_port", guest: 8081, host: 8081  # ← Nueva línea
+  # config.vm.network "forwarded_port", guest: 80, host: 8080   # HTTP
+  # config.vm.network "forwarded_port", guest: 443, host: 8443 # HTTPS
+
+  # Recursos de la VM
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "4096"
     vb.cpus = 2
   end
-  # config.vm.provision "shell", path: "confs/provision.sh", privileged: true
 
+  # Sincronizar carpeta local
+  config.vm.synced_folder "confs", "/shared"
 end
