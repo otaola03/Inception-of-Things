@@ -32,10 +32,10 @@ fi
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 # Create a K3D cluster:
-sudo k3d cluster create my-cluster
+# sudo k3d cluster create my-cluster
 # sudo k3d cluster create argocd-cluster --api-port 6550 --port 8080:80 --port 8443:443
 # sudo k3d cluster create mycluster --api-port 6443 --port 8080:80@loadbalancer --port 8443:443@loadbalancer
-# sudo k3d cluster create mycluster -p "8080:80@loadbalancer" -p "8443:443@loadbalancer"
+sudo k3d cluster create mycluster -p "8080:80@loadbalancer"
 
 # Install ArgoCD:
 sudo kubectl create namespace argocd
@@ -43,3 +43,6 @@ sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-
 
 # Install Ingress Nginx:
 # sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml --validate=false
+
+# Create dev namespace:
+sudo kubectl create namespace dev
