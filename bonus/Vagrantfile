@@ -1,0 +1,20 @@
+Vagrant.configure("2") do |config|
+  ip = "192.168.56.110"
+
+  config.vm.box = "debian/bullseye64"
+  config.vm.hostname = "argocd-vm"
+  
+  # Configuración de red
+  config.vm.network "private_network", ip: ip  # IP estática
+
+  # Recursos de la VM
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "6144"
+    vb.cpus = 6
+  end
+
+  # Sincronizar carpeta local
+  config.vm.synced_folder "confs", "/shared"
+
+  config.vm.provision "shell", path: "confs/init.sh", privileged: true
+end
