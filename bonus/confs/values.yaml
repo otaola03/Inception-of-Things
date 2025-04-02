@@ -5,7 +5,7 @@ global:
   ingress:
     configureCertmanager: false
     tls: {}
-    class: nginx
+    class: gitlab-nginx
 certmanager:
   install: false
 gitlab:

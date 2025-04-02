@@ -18,4 +18,4 @@ sudo kubectl get secrets -n gitlab
 
 sudo kubectl get secret gitlab-gitlab-initial-root-password -n gitlab -o jsonpath="{.data.password}" | base64 --decode
 
-kubectl port-forward --address 0.0.0.0 svc/gitlab-webservice-default -n gitlab 8080:8181
+sudo kubectl port-forward --address 0.0.0.0 svc/gitlab-webservice-default -n gitlab 8080:8181
