@@ -7,3 +7,15 @@ sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-
 sudo kubectl -n argocd port-forward --address 0.0.0.0 svc/argocd-server 8081:80
 
 sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 --decode && echo
+
+helm upgrade --install gitlab gitlab/gitlab \
+  --namespace gitlab --create-namespace \
+  -f /shared/values.yaml
+
+sudo kubectl port-forward --address 0.0.0.0 svc/gitlab-webservice-default -n gitlab 8080:8181
+
+sudo kubectl get secrets -n gitlab
+
+sudo kubectl get secret gitlab-gitlab-initial-root-password -n gitlab -o jsonpath="{.data.password}" | base64 --decode
+
+kubectl port-forward --address 0.0.0.0 svc/gitlab-webservice-default -n gitlab 8080:8181

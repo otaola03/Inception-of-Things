@@ -1,39 +1,11 @@
 global:
-  edition: ce
   hosts:
-    domain: "192.168.56.110.nip.io"
-    externalIP: "192.168.56.110"
-
-certmanager-issuer:
-  email: "tu-email@example.com"
-
-gitlab:
-  webservice:
-    resources:
-      requests:
-        cpu: 500m  # 0.5 vCPUs para webservice
-        memory: 1Gi
-      limits:
-        cpu: 1    # Limita a 1 vCPU el webservice
-        memory: 2Gi
-
-  sidekiq:
-    resources:
-      requests:
-        cpu: 200m  # 0.2 vCPUs para sidekiq
-        memory: 500Mi
-      limits:
-        cpu: 500m  # Limita sidekiq a 0.5 vCPUs
-        memory: 1Gi
-
-  gitlab-runner:
-    install: false  # Si no vas a usar GitLab CI/CD, desactívalo
-
-postgresql:
-  resources:
-    requests:
-      cpu: 300m  # 0.3 vCPUs para PostgreSQL
-      memory: 500Mi
-    limits:
-      cpu: 500m  # Limita PostgreSQL a 0.5 vCPUs
-      memory: 1Gi
+    domain: localhost
+    https: false
+  ingress:
+    configureCertmanager: false
+    class: nginx
+certmanager:
+  install: false
+gitlab-runner:
+  install: false

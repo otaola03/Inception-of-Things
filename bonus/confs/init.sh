@@ -29,12 +29,6 @@ else
 fi
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-# Install Helm:
-curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
-# Add gitlab Helm repository:
-helm repo add gitlab https://charts.gitlab.io
-helm repo update
 
 
 # Create a K3D cluster:
@@ -51,6 +45,18 @@ sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-
 
 # Install Ingress Nginx:
 sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml --validate=false
+
+# Install Helm:
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# Add gitlab Helm repository:
+sudo helm repo add gitlab https://charts.gitlab.io
+sudo helm repo update
+
+# Install Gitlab:
+sudo kubectl create namespace gitlab
+sudo helm install gitlab gitlab/gitlab -n gitlab -f /shared/values.yaml
+
 
 # Create dev namespace:t
 sudo kubectl create namespace dev
