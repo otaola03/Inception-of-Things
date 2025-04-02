@@ -7,7 +7,7 @@ underline='\033[4m'
 reset='\033[0m'
 
 # Add Docker's official GPG key:
-echo "${blue}🐋 Insatlling Docker${reset}"
+echo -e "${blue}🐋 Insatlling Docker${reset}"
 sudo apt-get update
 sudo apt-get install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -26,18 +26,18 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 
 # Install K3D:
-echo "${blue}🐋 Insatlling K3D${reset}"
+echo -e "${blue}🐋 Insatlling K3D${reset}"
 curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
 
-echo "${blue}🐋 Insatlling Kubectl${reset}"
+echo -e "${blue}🐋 Insatlling Kubectl${reset}"
 # Install Kubectl:
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
 if echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check | grep -q 'OK'; then
-    echo ${green}"La verificación fue exitosa.${reset}"
+    echo -e ${green}"La verificación fue exitosa.${reset}"
 else
-    echo ${red}"La verificación falló.${reset}"
+    echo -e ${red}"La verificación falló.${reset}"
 	return 1
 fi
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
@@ -45,7 +45,7 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 
 # Create a K3D cluster:
-echo "${blue}📦 Creating k3d cluster${reset}"
+echo -e "${blue}📦 Creating k3d cluster${reset}"
 # sudo k3d cluster create my-cluster
 # sudo k3d cluster create argocd-cluster --api-port 6550 --port 8080:80 --port 8443:443
 # sudo k3d cluster create mycluster --api-port 6443 --port 8080:80@loadbalancer --port 8443:443@loadbalancer
@@ -54,10 +54,10 @@ sudo k3d cluster create mycluster -p "8082:80@loadbalancer"
 
 
 # Install Ingress Nginx:
-echo "${blue}📡 Installing Ingress Nginx${reset}"
+echo -e "${blue}📡 Installing Ingress Nginx${reset}"
 sudo kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml --validate=false
 
-echo "${blue}⏳ Waiting for ingress-nginx-controller pod to be ready...${reset}"
+echo -e "${blue}⏳ Waiting for ingress-nginx-controller pod to be ready...${reset}"
 while true; do
     # Obtener la línea correspondiente al pod ingress-nginx-controller
     status_line=$(sudo kubectl get pods -n ingress-nginx | grep "ingress-nginx-controller")
@@ -69,7 +69,7 @@ while true; do
 	echo "line: $status_line"
     # Verificar si el pod está listo y en ejecución
     if [[ "$ready_status" == "1/1" && "$pod_status" == "Running" ]]; then
-        echo "${green}El pod ingress-nginx-controller está listo y en ejecución.${reset}"
+        echo -e "${green}El pod ingress-nginx-controller está listo y en ejecución.${reset}"
         break  # Salir del bucle una vez que la condición se cumpla
     fi
     
@@ -79,26 +79,26 @@ done
 
 
 # Install ArgoCD:
-echo "${blue}📦 Installing ArgoCD${reset}"
+echo -e "${blue}📦 Installing ArgoCD${reset}"
 sudo kubectl create namespace argocd
 sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 
 # Install Helm:
-echo "${blue}📦 Installing Helm${reset}"
+echo -e "${blue}📦 Installing Helm${reset}"
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 # Add gitlab Helm repository:
-echo "${blue}🦊 Adding Gitlab Helm repository${reset}"
+echo -e "${blue}🦊 Adding Gitlab Helm repository${reset}"
 sudo helm repo add gitlab https://charts.gitlab.io
 sudo helm repo update
 
 # Install Gitlab:
-echo "${blue}🦊 Installing Gitlab${reset}"
+echo -e "${blue}🦊 Installing Gitlab${reset}"
 sudo kubectl create namespace gitlab
 sudo helm install gitlab gitlab/gitlab -n gitlab -f /shared/values.yaml
 
 
 # Create dev namespace:t
-echo "${blue}📛 Creating dev namespace${reset}"
+echo -e "${blue}📛 Creating dev namespace${reset}"
 sudo kubectl create namespace dev
