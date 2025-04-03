@@ -2,28 +2,28 @@
 # Vagrantfile
 Vagrant.configure("2") do |config|
   # Configuración de la máquina servidor
-  config.vm.define "server" do |server|
+  config.vm.define "jperezS" do |server|
     server.vm.box = "generic/alpine318"
     server.vm.network "private_network", ip: "192.168.56.110"
     server.vm.hostname = "jperezS"
-    server.vm.provision "shell", path: "confs/server.sh"
-    server.vm.synced_folder "confs", "/shared"
+    server.vm.provision "shell", path: "scripts/server.sh"
+    server.vm.synced_folder "scripts", "/shared"
     server.vm.provider "virtualbox" do |vb|
-      vb.name = "k3s-server"
+      vb.name = "jperezS"
       vb.memory = "1024"
       vb.cpus = 1
     end
   end
 
   # Configuración de la máquina trabajador
-  config.vm.define "worker" do |worker|
+  config.vm.define "jperezW" do |worker|
     worker.vm.box = "generic/alpine318"
-    worker.vm.hostname = "jperezSW"
+    worker.vm.hostname = "jperezW"
     worker.vm.network "private_network", ip: "192.168.56.111"
-    worker.vm.provision "shell", path: "confs/worker.sh", args: ["192.168.56.110"]
-    worker.vm.synced_folder "confs", "/shared"
+    worker.vm.provision "shell", path: "scripts/worker.sh", args: ["192.168.56.110"]
+    worker.vm.synced_folder "scripts", "/shared"
     worker.vm.provider "virtualbox" do |vb|
-      vb.name = "k3s-worker"
+      vb.name = "jperezW"
       vb.memory = "1024"
       vb.cpus = 1
     end
