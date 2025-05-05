@@ -7,3 +7,6 @@ sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-
 sudo kubectl -n argocd port-forward --address 0.0.0.0 svc/argocd-server 8081:80
 
 sudo kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 --decode && echo
+admin
+
+http://192.168.56.110:8080/
